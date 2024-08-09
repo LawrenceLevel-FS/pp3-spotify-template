@@ -8,6 +8,7 @@ const app = express();
 app.use(morgan("dev"));
 app.use(cors());
 
+// PORT 3001
 const port = process.env.PORT || 3001;
 
 module.exports = { app, port };
