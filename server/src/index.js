@@ -1,4 +1,4 @@
-const { app, port } = require("./app/server");
+const { app, port } = require("../app/server");
 
 // http://localhost:3001/
 app.get("/", (req, res) => {
