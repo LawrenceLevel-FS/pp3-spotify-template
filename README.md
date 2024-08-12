@@ -1,24 +1,59 @@
-# Weekly Project updates
+# Spotify Spin-off App
 
-## Project Overview
+## Overview
 
-This section of your README should contain the description of your project, features, and functionality.
+The Spotify Spin-off App is a full-stack web application inspired by Spotify, designed to provide users with music streaming capabilities. The frontend is built with React, running on port 3000, while the backend Node.js server runs on port 3001. This app allows users to browse music, create playlists, and stream their favorite tracks.
+
+### Features
+
+- **Browse Music:** Explore a wide variety of tracks and albums.
+- **Create Playlists:** Users can create, update, and delete their custom playlists.
+- **Music Streaming:** Stream music directly from the app with a user-friendly interface.
 
 ## Prerequisites
 
-This section of your README file should list out all of the software requirements your project needs to run (E.g browser version, NodeJS version, etc)
+- Node.js >= v18.19.1
+- npm >= v10.2.4
+- MongoDB >= v4.0
+- Browser: Latest version of Chrome, Firefox, or Safari
 
 ## Getting Started
 
-The Getting Started section of any README file normally contains all of the instructions for a developer to get a working version of your project up and running.
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/LawrenceLevel-FS/pp3-spotify-template.git
+   ```
+
+2. Go to cloned folder
+
+   ```
+   cd pp3-spotify-template
+   ```
+
+3. Go to client folder and install dependencies
+   ```npm install
+   cd client
+   npm install
+   npm run start
+   cd ..
+   ```
+4. Start server
+   ```
+   cd server
+   npm install
+   npm run dev
+   cd ..
+   ```
 
 ### Links
 
-This section of your README contains a list of important links such as local build URLs such as localhost:3000, staging links, etc.
+```
+http://localhost:3001
+```
 
-Define all of your project milestones using GitHub. You can setup your milestones whichever way you would like.
-Create your issues/tickets in your repository. Again, this is a project class so you can setup your tickets however you would like to. Just make sure you are defining clear goals & tasks for all 4 weeks.
-Create your backend API that loads in your environment variables from a ".env" file.
-A good example of a complete README.md file can be found in my public GitHub repository template for this class called jworkman/pp3-spotify-template.
-
-If you have completed the 5 tasks outlined above then you have completed all of the requirements for week 1.
+```
+http://localhost:3000
+```
