@@ -1,11 +1,12 @@
 import "./index.css";
 import NavBar from "./components/NavBar";
+import { ContextProvider } from "./components/MyContext";
 
 function App() {
   return (
-    <div>
+    <ContextProvider>
       <NavBar />
-    </div>
+    </ContextProvider>
   );
 }
 
