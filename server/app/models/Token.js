@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const TokenSchema = new mongoose.Schema({
   accessToken: String,
-  refreshToken: String,
+  tokenType: String,
   expiresIn: Number,
   createdAt: { type: Date, default: Date.now },
 });
