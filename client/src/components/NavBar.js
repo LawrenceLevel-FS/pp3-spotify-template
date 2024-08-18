@@ -9,6 +9,7 @@ import {
 import { MyContext } from "./MyContext";
 import { useContext } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const NavBar = () => {
   const { toggleMenu, setToggleMenu } = useContext(MyContext);
@@ -28,17 +29,39 @@ const NavBar = () => {
             size={30}
             className="mb-8 "
           />
-          <li className="flex items-center gap-2 mb-6 text-2xl font-thin">
-            <IoHome className="mr-6" /> Home
+          <li onClick={() => setToggleMenu(!toggleMenu)}>
+            <Link
+              className="flex items-center gap-2 mb-6 text-2xl font-thin"
+              to="/"
+            >
+              <IoHome className="mr-6" />
+              Home
+            </Link>
           </li>
-          <li className="flex items-center gap-2 mb-6 text-2xl font-thin">
-            <IoSearchOutline className="mr-6" /> Search
+          <li onClick={() => setToggleMenu(!toggleMenu)}>
+            <Link
+              className="flex items-center gap-2 mb-6 text-2xl font-thin"
+              to="/search"
+            >
+              <IoSearchOutline className="mr-6" />
+              Search
+            </Link>
           </li>
-          <li className="flex items-center gap-2 mb-6 text-2xl font-thin">
-            <IoHeart className="mr-6" /> Favorite
+          <li onClick={() => setToggleMenu(!toggleMenu)}>
+            <Link
+              className="flex items-center gap-2 mb-6 text-2xl font-thin"
+              to="/favorites"
+            >
+              <IoHeart className="mr-6" /> Favorite
+            </Link>
           </li>
-          <li className="flex items-center gap-2 mb-6 text-2xl font-thin">
-            <IoLibrary className="mr-6" /> Library
+          <li onClick={() => setToggleMenu(!toggleMenu)}>
+            <Link
+              className="flex items-center gap-2 mb-6 text-2xl font-thin"
+              to="/library"
+            >
+              <IoLibrary className="mr-6" /> Library
+            </Link>
           </li>
         </motion.ul>
       )}
