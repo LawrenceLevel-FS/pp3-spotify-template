@@ -4,6 +4,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const app = express();
 const db = require("./db/database");
+const tokenGenRouter = require("./routes/authRoute");
 
 // Middleware
 app.use(morgan("dev"));
@@ -14,5 +15,8 @@ db();
 
 // PORT 3001
 const port = process.env.PORT || 3001;
+
+// Routes
+app.use("/auth/getToken", tokenGenRouter);
 
 module.exports = { app, port };
