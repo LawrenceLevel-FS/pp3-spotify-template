@@ -1,6 +1,10 @@
 const router = require("express").Router();
-const { getToken } = require("../controller/authController");
+const { createToken, getToken } = require("../controller/authController");
+
+// CREATE AND STORE TOKEN ROUTE
+router.post("/", createToken);
 
 // GET TOKEN ROUTE
-router.post("/", getToken);
+router.get("/", getToken);
+
 module.exports = router;
