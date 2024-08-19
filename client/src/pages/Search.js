@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
 
 const Search = () => {
-  const [categories, setCategories] = useState({});
+  const [categories, setCategories] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const getCategories = async () => {
     try {
@@ -19,20 +20,30 @@ const Search = () => {
         }
       );
 
-      const data = await response.data;
-
-      await setCategories(data);
+      const data = response.data;
+      setCategories(data);
+      setLoading(false);
       console.log(categories);
     } catch (error) {
       console.log(error.message);
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     getCategories();
   }, []);
+
+  if (loading) {
+    return (
+      <div>
+        <h1>Loading...</h1>
+      </div>
+    );
+  }
+
   return (
-    <section className="bg-black h-screen text-white px-6">
+    <section className="bg-black min-h-screen text-white px-6">
       {/* Search bar */}
       <div className="pt-10">
         <div className="bg-gray-200 flex items-center gap-4 py-1 rounded">
@@ -44,18 +55,31 @@ const Search = () => {
           />
         </div>
       </div>
+
       {/* Categories */}
       <div id="categories" className="mt-4">
-        <h2 className="text-lg tracking-wide">Categories</h2>
+        <h2 className="text-lg tracking-wide mb-2 mt-6 font-medium">
+          Categories
+        </h2>
+        <div className="grid grid-cols-3 gap-3">
+          {categories.categories.items.map((item) => {
+            return (
+              <div key={item.id} className="text-center mb-6">
+                <a href="#">
+                  <img
+                    src={item.icons[0].url}
+                    className="w-32 rounded-lg"
+                    alt={item.name}
+                  />
+                  <h1 className="text-gray-400 font-bold text-sm mt-1">
+                    {item.name}
+                  </h1>
+                </a>
+              </div>
+            );
+          })}
+        </div>
       </div>
-      {categories.categories.items.map((item) => {
-        return (
-          <div>
-            <img src={item.icons[0].url} width={item.icons[0].width} alt="" />
-            <h1 className="text-black">{item.name}</h1>
-          </div>
-        );
-      })}
     </section>
   );
 };
