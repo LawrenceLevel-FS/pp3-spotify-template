@@ -1,25 +1,24 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { MyContext } from "../components/MyContext";
 import { IoSearchOutline } from "react-icons/io5";
 
 const Search = () => {
   const [categories, setCategories] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { getToken } = useContext(MyContext);
 
   const getCategories = async () => {
+    const token = await getToken();
     try {
-      const token = await axios.get("http://localhost:3001/auth/getToken");
-      const tokenData = token.data.token;
-
       const response = await axios.get(
         "https://api.spotify.com/v1/browse/categories",
         {
           headers: {
-            Authorization: `Bearer ${tokenData[0].accessToken}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
-
       const data = response.data;
       setCategories(data);
       setLoading(false);
