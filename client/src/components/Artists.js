@@ -2,21 +2,22 @@ import { useContext, useState, useEffect } from "react";
 import { MyContext } from "./MyContext";
 import axios from "axios";
 
-const Albums = () => {
-  const [myAlbums, setMyAlbums] = useState();
+const Artist = () => {
+  const [Artists, setArtists] = useState();
   const [loading, setLoading] = useState(true);
   const { getToken } = useContext(MyContext);
 
-  const displayAlbums = async () => {
+  const displayArtists = async () => {
     try {
       const token = await getToken();
       const response = await axios.get(
-        "https://api.spotify.com/v1/albums?ids=382ObEPsp2rxGrnsizN5TX%2C1A2GTWGtFfWp7KSQTwWOyo%2C2noRn2Aes5aoNVsU6iWThc",
+        "https://api.spotify.com/v1/artists?ids=2CIMQHirSU0MQqyYHq0eOx%2C57dN52uHvrHOxijzpIgu3E%2C1vCWHaC5f2uS3yhpwWbIA6",
         { headers: { Authorization: `Bearer ${token}` } }
       );
       const data = response.data;
+      console.log(data);
 
-      setMyAlbums(data);
+      setArtists(data);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -24,7 +25,7 @@ const Albums = () => {
     }
   };
   useEffect(() => {
-    displayAlbums();
+    displayArtists();
   }, []);
 
   if (loading) {
@@ -37,14 +38,18 @@ const Albums = () => {
 
   return (
     <article>
-      <h2 className="text-4xl tracking-wide">Albums</h2>
-      <div className="flex overflow-scroll mb-10">
-        {myAlbums.albums.map((album) => {
+      <h2 className="text-4xl tracking-wide">Artists</h2>
+      <div className="flex overflow-scroll mb-10 mt-4 gap-2 bg-red-600">
+        {Artists.artists.map((artist) => {
           return (
-            <div key={album.id}>
-              <img src={album.images[0].url} width="200" height="200" alt="" />
-              <p>{album.name}</p>
-              <p>{album.release_date}</p>
+            <div key={artist.id}>
+              <img
+                className="object-cover min-h-28 min-w-28"
+                src={artist.images[0].url}
+                alt=""
+              />
+              <p>{artist.name}</p>
+              <p>{artist.release_date}</p>
             </div>
           );
         })}
@@ -53,4 +58,4 @@ const Albums = () => {
   );
 };
 
-export default Albums;
+export default Artist;

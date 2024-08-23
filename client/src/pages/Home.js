@@ -1,4 +1,5 @@
 import Albums from "../components/Albums";
+import Artist from "../components/Artists";
 
 const Home = () => {
   return (
@@ -7,9 +8,12 @@ const Home = () => {
       <div>
         <Albums />
       </div>
-      {/* Playlist Section */}
-      <h2 className="text-4xl tracking-wide">Playlist</h2>
       {/* Artists Section */}
+      <div>
+        <Artist />
+      </div>
+      <h2 className="text-4xl tracking-wide">Playlist</h2>
+      {/* Playlist Section */}
       <h2 className="text-4xl tracking-wide">Artists</h2>
     </section>
   );

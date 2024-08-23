@@ -22,7 +22,6 @@ const Search = () => {
       const data = response.data;
       setCategories(data);
       setLoading(false);
-      console.log(categories);
     } catch (error) {
       console.log(error.message);
       setLoading(false);

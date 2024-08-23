@@ -17,6 +17,6 @@ db();
 const port = process.env.PORT || 3001;
 
 // Routes
-app.use("/auth/getToken", tokenGenRouter);
+app.use("/auth", tokenGenRouter);
 
 module.exports = { app, port };
