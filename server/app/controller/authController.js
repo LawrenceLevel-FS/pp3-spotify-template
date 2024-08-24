@@ -58,11 +58,21 @@ const callback = async (req, res) => {
       refreshToken,
     });
 
-    res.json(token);
+    res.redirect("http://localhost:3000 ");
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: error.message });
   }
 };
 
-module.exports = { callback, login };
+// GET TOKEN
+const getToken = async (req, res) => {
+  try {
+    const token = await Token.find();
+    res.status(200).json({ token: token });
+  } catch (error) {
+    res.json(error.message);
+  }
+};
+
+module.exports = { callback, login, getToken };
