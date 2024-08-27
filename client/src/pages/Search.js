@@ -2,11 +2,13 @@ import axios from "axios";
 import { useEffect, useState, useContext } from "react";
 import { MyContext } from "../components/MyContext";
 import { IoSearchOutline } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 
 const Search = () => {
   const [categories, setCategories] = useState(null);
   const [loading, setLoading] = useState(true);
   const { getToken } = useContext(MyContext);
+  const navigate = useNavigate();
 
   const getCategories = async () => {
     const token = await getToken();
@@ -24,6 +26,10 @@ const Search = () => {
       setLoading(false);
     } catch (error) {
       console.log(error.message);
+      if (error.request.withCredentials === false) {
+        navigate("/login");
+      }
+      console.log(error.request.withCredentials);
       setLoading(false);
     }
   };

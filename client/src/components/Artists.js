@@ -21,7 +21,7 @@ const Artist = () => {
       setLoading(false);
     } catch (error) {
       console.log(error);
-      setLoading(false);
+      setLoading(true);
     }
   };
   useEffect(() => {

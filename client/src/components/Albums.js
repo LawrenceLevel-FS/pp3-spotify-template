@@ -1,11 +1,13 @@
 import { useContext, useState, useEffect } from "react";
 import { MyContext } from "./MyContext";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Albums = () => {
   const [myAlbums, setMyAlbums] = useState();
   const [loading, setLoading] = useState(true);
   const { getToken } = useContext(MyContext);
+  const navigate = useNavigate();
 
   const displayAlbums = async () => {
     try {
@@ -20,7 +22,10 @@ const Albums = () => {
       setLoading(false);
     } catch (error) {
       console.log(error);
-      setLoading(false);
+      if (error.request.withCredentials === false) {
+        navigate("/login");
+      }
+      setLoading(true);
     }
   };
   useEffect(() => {
