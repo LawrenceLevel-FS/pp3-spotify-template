@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import Search from "./pages/Search";
 import Favorites from "./pages/Favorites";
 import Library from "./pages/Library";
+import Login from "./pages/Login";
 
 function App() {
   return (
@@ -14,9 +15,10 @@ function App() {
       <NavBar />
       <Routes>
         <Route exact path="/" element={<Home />} />
-        <Route exact path="/search" element={<Search />} />
-        <Route exact path="/favorites" element={<Favorites />} />
-        <Route exact path="/library" element={<Library />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/favorites" element={<Favorites />} />
+        <Route path="/library" element={<Library />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </ContextProvider>
   );

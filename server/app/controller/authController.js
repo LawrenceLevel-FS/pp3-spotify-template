@@ -1,33 +1,67 @@
-const axios = require("axios");
 const Token = require("../models/Token");
+const axios = require("axios");
+const querystring = require("querystring");
 
-// MAKE AND STORE TOKEN
-const createToken = async (req, res) => {
+// LOGIN
+const login = (req, res) => {
+  let scope = "user-read-private user-read-email";
+
+  res.redirect(
+    "https://accounts.spotify.com/authorize?" +
+      querystring.stringify({
+        response_type: "code",
+        client_id: process.env.SPOTIFY_CLIENT_ID,
+        scope: scope,
+        redirect_uri: process.env.REDIRECT_URI,
+      })
+  );
+};
+
+// CALLBACK
+const callback = async (req, res) => {
   try {
-    const data = `grant_type=client_credentials&client_id=${encodeURIComponent(
-      process.env.SPOTIFY_CLIENT_ID
-    )}&client_secret=${encodeURIComponent(process.env.SPOTIFY_CLIENT_SECRET)}`;
+    const code = req.query.code || null;
 
-    const response = await axios({
-      method: "POST",
+    const authOptions = {
+      method: "post",
       url: "https://accounts.spotify.com/api/token",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+      data: {
+        code: code,
+        redirect_uri: process.env.REDIRECT_URI,
+        grant_type: "authorization_code",
       },
-      data: data,
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+        Authorization:
+          "Basic " +
+          new Buffer.from(
+            process.env.SPOTIFY_CLIENT_ID +
+              ":" +
+              process.env.SPOTIFY_CLIENT_SECRET
+          ).toString("base64"),
+      },
+      json: true,
+    };
+    const {
+      data: {
+        access_token: accessToken,
+        token_type: tokenType,
+        expires_in: expiresIn,
+        refresh_token: refreshToken,
+      },
+    } = await axios(authOptions);
+
+    const token = await Token.create({
+      accessToken,
+      tokenType,
+      expiresIn,
+      refreshToken,
     });
 
-    const tokenData = {
-      accessToken: response.data.access_token,
-      tokenType: response.data.token_type,
-      expiresIn: response.data.expires_in,
-    };
-
-    await Token.create(tokenData);
-    res.status(201).json({ token: tokenData });
+    res.redirect("http://localhost:3000 ");
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to get Token" });
+    console.log(error);
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -35,11 +69,10 @@ const createToken = async (req, res) => {
 const getToken = async (req, res) => {
   try {
     const token = await Token.find();
-
     res.status(200).json({ token: token });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.json(error.message);
   }
 };
 
-module.exports = { createToken, getToken };
+module.exports = { callback, login, getToken };
