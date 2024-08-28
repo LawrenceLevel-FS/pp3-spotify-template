@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 const Search = () => {
   const [categories, setCategories] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [searchValue, setSearchValue] = useState("");
+  const [searchQuery, setSearchQuery] = useState();
   const { getToken } = useContext(MyContext);
   const navigate = useNavigate();
 
@@ -34,6 +36,35 @@ const Search = () => {
     }
   };
 
+  // search bar logic
+  useEffect(() => {
+    const getSearchResults = async () => {
+      const token = await getToken();
+      await axios
+        .get(`https://api.spotify.com/v1/search?q=${searchValue}&type=album`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => {
+          setSearchQuery(() => res.data);
+          console.log(searchQuery.albums.items);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    getSearchResults();
+  }, [searchValue]);
+  const searchSongs = (e) => {
+    const { value } = e.target;
+    const searchResults = document.querySelector("#search-results");
+    setSearchValue(value);
+
+    value.trim() === ""
+      ? searchResults.classList.add("hidden")
+      : searchResults.classList.remove("hidden");
+    console.log(value);
+  };
+
   useEffect(() => {
     getCategories();
   }, []);
@@ -47,16 +78,30 @@ const Search = () => {
   }
 
   return (
-    <section className="bg-black min-h-screen text-white px-6">
+    <section className="bg-black min-h-screen text-white px-6 ">
       {/* Search bar */}
-      <div className="pt-10">
+      <div className="pt-10 relative">
         <div className="bg-gray-200 flex items-center gap-4 py-1 rounded">
           <IoSearchOutline size={20} className="text-gray-500 ml-4" />
           <input
             placeholder={"search songs.."}
-            className="border bg-inherit w-full"
+            className="border bg-inherit w-full text-black"
             type="text"
+            onChange={searchSongs}
           />
+        </div>
+        <div
+          id="search-results"
+          className="hidden bg-red-400 w-full max-h-60 absolute mt-2 rounded overflow-scroll"
+        >
+          {searchQuery &&
+            searchQuery.albums.items.map((music) => {
+              return (
+                <div key={music.id}>
+                  <p>{music.artists[0].name}</p>
+                </div>
+              );
+            })}
         </div>
       </div>
 

@@ -13,7 +13,7 @@ const Home = () => {
         <Artist />
       </div>
       <h2 className="text-4xl tracking-wide">Playlist</h2>
-      {/* Playlist Section */}
+      {/* Playlist Seection */}
       <h2 className="text-4xl tracking-wide">Artists</h2>
     </section>
   );
