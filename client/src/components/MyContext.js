@@ -13,7 +13,6 @@ const ContextProvider = ({ children }) => {
       const token = await axios.get("http://localhost:3001/auth/getToken");
       const tokenData =
         token.data.token[token.data.token.length - 1].accessToken;
-      console.log(tokenData);
       return tokenData;
     } catch (error) {
       console.log(error.message);

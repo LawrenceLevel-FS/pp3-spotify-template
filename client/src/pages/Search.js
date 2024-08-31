@@ -3,6 +3,7 @@ import { useEffect, useState, useContext } from "react";
 import { MyContext } from "../components/MyContext";
 import { IoSearchOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import Categories from "../components/Categories";
 
 const Search = () => {
   const [categories, setCategories] = useState(null);
@@ -36,6 +37,20 @@ const Search = () => {
     }
   };
 
+  // Go to album
+  const goToSearch = async (item) => {
+    const token = await getToken();
+    console.log("test");
+    await axios
+      .get(item.href, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err));
+  };
+
   // search bar logic
   useEffect(() => {
     const getSearchResults = async () => {
@@ -49,11 +64,15 @@ const Search = () => {
           console.log(searchQuery.albums.items);
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err.message);
         });
     };
-    getSearchResults();
+
+    if (searchValue) {
+      getSearchResults();
+    }
   }, [searchValue]);
+
   const searchSongs = (e) => {
     const { value } = e.target;
     const searchResults = document.querySelector("#search-results");
@@ -62,7 +81,6 @@ const Search = () => {
     value.trim() === ""
       ? searchResults.classList.add("hidden")
       : searchResults.classList.remove("hidden");
-    console.log(value);
   };
 
   useEffect(() => {
@@ -92,43 +110,36 @@ const Search = () => {
         </div>
         <div
           id="search-results"
-          className="hidden bg-red-400 w-full max-h-60 absolute mt-2 rounded overflow-scroll"
+          className="hidden bg-gray-200 w-full max-h-60 absolute mt-2 rounded overflow-scroll"
         >
+          <p className="text-gray-400 text-sm ml-2 mt-2">Search Results</p>
           {searchQuery &&
             searchQuery.albums.items.map((music) => {
               return (
-                <div key={music.id}>
-                  <p>{music.artists[0].name}</p>
-                </div>
+                <a href="#" key={music.id}>
+                  <div className="text-gray-700 bg-gray-400 m-2 rounded-md flex items-center py-4">
+                    <img
+                      src={music.images[0].url}
+                      className="w-10 h-10 mx-4 rounded"
+                      alt={music.name}
+                    />
+                    <div className="text-xs">
+                      <p>
+                        <span className="font-bold">Album</span>: {music.name}
+                      </p>
+                      <p>
+                        <span className="font-bold">Artist</span>:{" "}
+                        {music.artists[0].name}
+                      </p>
+                    </div>
+                  </div>
+                </a>
               );
             })}
         </div>
       </div>
-
       {/* Categories */}
-      <div id="categories" className="mt-4">
-        <h2 className="text-lg tracking-wide mb-2 mt-6 font-medium">
-          Categories
-        </h2>
-        <div className="grid grid-cols-3 gap-3">
-          {categories.categories.items.map((item) => {
-            return (
-              <div key={item.id} className="text-center mb-6">
-                <a href="#">
-                  <img
-                    src={item.icons[0].url}
-                    className="w-32 rounded-lg"
-                    alt={item.name}
-                  />
-                  <h1 className="text-gray-400 font-bold text-sm mt-1">
-                    {item.name}
-                  </h1>
-                </a>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+      <Categories categories={categories} getToken={getToken} />
     </section>
   );
 };
