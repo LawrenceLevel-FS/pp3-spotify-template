@@ -1,27 +1,32 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-const Categories = ({ categories, getToken }) => {
+
+const Categories = () => {
+  const [categories, setCategories] = useState();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const getCateglories = async () => {
+      try {
+        const response = await axios("http://localhost:3001/categories");
+        const data = await response.data;
+        setCategories(data);
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    getCateglories();
+  }, []);
+
   // click category
   const linkCategory = async (item) => {
-    const token = await getToken();
-    await axios
-      .get(item.href, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        const playlistData = res.data;
-        if (playlistData) {
-          navigate(`${item.id}`, {
-            item,
-            state: { playlistData: playlistData },
-          });
-        }
-      })
-      .catch((err) => console.log(err.message));
+    await axios({
+      method: "post",
+      url: "http://localhost:3001/categories",
+      data: item,
+    });
+    console.log(item);
   };
 
   return (
@@ -30,24 +35,25 @@ const Categories = ({ categories, getToken }) => {
         Categories
       </h2>
       <div className="grid grid-cols-3 gap-3">
-        {categories.categories.items.map((item) => {
-          return (
-            <div
-              onClick={() => linkCategory(item)}
-              key={item.id}
-              className="text-center mb-6"
-            >
-              <img
-                src={item.icons[0].url}
-                className="w-32 rounded-lg"
-                alt={item.name}
-              />
-              <h1 className="text-gray-400 font-bold text-sm mt-1">
-                {item.name}
-              </h1>
-            </div>
-          );
-        })}
+        {categories &&
+          categories.categories.items.map((item) => {
+            return (
+              <div
+                onClick={() => linkCategory(item)}
+                key={item.id}
+                className="text-center mb-6"
+              >
+                <img
+                  src={item.icons[0].url}
+                  className="w-32 rounded-lg"
+                  alt={item.name}
+                />
+                <h1 className="text-gray-400 font-bold text-sm mt-1">
+                  {item.name}
+                </h1>
+              </div>
+            );
+          })}
       </div>
     </div>
   );

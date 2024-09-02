@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { MyContext } from "../components/MyContext";
 import axios from "axios";
 
@@ -8,6 +8,7 @@ const Playlists = () => {
   const [playlist, setPlaylist] = useState();
   const [loading, setLoading] = useState(true);
   const location = useLocation();
+  const navigate = useNavigate();
   const { playlistData } = location.state || {};
 
   useEffect(() => {
@@ -19,6 +20,7 @@ const Playlists = () => {
         });
         const data = response.data;
 
+        console.log(data);
         setPlaylist(data);
       } catch (error) {
         console.log(error);
@@ -28,8 +30,11 @@ const Playlists = () => {
     };
 
     getPlaylist();
-  }, [getToken, playlistData.href]);
-
+  }, []);
+  const getSongs = (song) => {
+    console.log(song);
+    navigate(`/search/tracks/${song.id}`, { state: { song: song } });
+  };
   if (loading) {
     return (
       <div>
@@ -46,7 +51,11 @@ const Playlists = () => {
       <div className="grid grid-cols-3 gap-3 mx-6">
         {playlist.playlists.items.map((songs) => {
           return (
-            <div key={`${songs.id}343wsfdscdcsds`} className="text-center mb-6">
+            <div
+              onClick={() => getSongs(songs)}
+              key={`${songs.id}343wsfdscdcsds`}
+              className="text-center mb-6"
+            >
               <img
                 src={songs.images[0].url}
                 className="w-32 rounded-lg"
