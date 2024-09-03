@@ -23,8 +23,63 @@ const getCategories = async (req, res) => {
 };
 
 // POST CATEGORIES ITEMS
-const potCategoryItem = async (req, res) => {
-  res.status(201).json(req.body);
+const postCategoryItem = async (req, res) => {
+  try {
+    const token = await getNewestToken();
+
+    const categoryItem = await req.body;
+    //   console.log(categoryItem);
+    const response = await axios.get(categoryItem.href, {
+      headers: { Authorization: `${token.tokenType} ${token.accessToken}` },
+    });
+
+    const data = response.data;
+    const link = `${req.originalUrl}/${data.id}`;
+    res.status(200).json({ redirectUrl: link });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
-module.exports = { getCategories, potCategoryItem };
+// POST CATEGORY PLAYLISTS
+const categoryPlaylists = async (req, res) => {
+  try {
+    const token = await getNewestToken();
+
+    const categoryItem = await req.body;
+
+    const response = await axios.get(categoryItem.href + "/playlists", {
+      headers: { Authorization: `${token.tokenType} ${token.accessToken}` },
+    });
+
+    const data = response.data;
+    console.log(data);
+    res.status(200).json({ data });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// POST CATEGORY TRACKS
+const categloryTracks = async (req, res) => {
+  try {
+    const token = await getNewestToken();
+
+    const catTracks = await req.body.tracks;
+    const response = await axios.get(catTracks.href, {
+      headers: { Authorization: `${token.tokenType} ${token.accessToken}` },
+    });
+
+    const data = response.data;
+    res.status(200).json({ data });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = {
+  getCategories,
+  postCategoryItem,
+  categoryPlaylists,
+  categloryTracks,
+};

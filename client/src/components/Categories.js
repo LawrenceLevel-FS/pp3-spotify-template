@@ -4,6 +4,7 @@ import axios from "axios";
 
 const Categories = () => {
   const [categories, setCategories] = useState();
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -12,8 +13,10 @@ const Categories = () => {
         const response = await axios("http://localhost:3001/categories");
         const data = await response.data;
         setCategories(data);
+        setLoading(false);
       } catch (error) {
         console.log(error.message);
+        setLoading(false);
       }
     };
     getCateglories();
@@ -21,13 +24,34 @@ const Categories = () => {
 
   // click category
   const linkCategory = async (item) => {
-    await axios({
-      method: "post",
-      url: "http://localhost:3001/categories",
-      data: item,
-    });
-    console.log(item);
+    try {
+      const response = await axios({
+        method: "post",
+        url: "http://localhost:3001/categories",
+        data: item,
+      });
+      const redirectUrl = response.data.redirectUrl;
+      // Redirect to the new URL
+      if (redirectUrl) {
+        navigate(redirectUrl, { state: { item: item } });
+      } else {
+        console.error("Redirect URL not found");
+      }
+    } catch (error) {
+      console.log(error.message);
+      if (error.request.withCredentials === false) {
+        navigate("/login");
+      }
+    }
   };
+
+  if (loading) {
+    return (
+      <div>
+        <p>...Loading</p>
+      </div>
+    );
+  }
 
   return (
     <div id="categories" className="mt-4">
