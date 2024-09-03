@@ -1,11 +1,17 @@
 const Token = require("../models/Token");
+const SpotifyWebApi = require("spotify-web-api-node");
 const axios = require("axios");
 const querystring = require("querystring");
 
 // LOGIN
 const login = (req, res) => {
-  let scope = "user-read-private user-read-email";
+  const spotifyApi = new SpotifyWebApi({
+    clientId: process.env.SPOTIFY_CLIENT_ID,
+    clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+    redirectUri: process.env.REDIRECT_URI,
+  });
 
+  let scope = "user-read-private user-read-email";
   res.redirect(
     "https://accounts.spotify.com/authorize?" +
       querystring.stringify({

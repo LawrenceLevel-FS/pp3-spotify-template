@@ -7,6 +7,8 @@ const db = require("./db/database");
 // Importing Routes
 const tokenGenRouter = require("./routes/authRoute");
 const userRoutes = require("./routes/userRoute");
+const spotifyArtistRoute = require("./routes/spotifyArtistsRoutes");
+const spotifyCategoryRoute = require("./routes/spotifyCategoriesRoutes");
 
 // Middleware
 app.use(morgan("dev"));
@@ -23,5 +25,8 @@ const port = process.env.PORT || 3001;
 // Routes
 app.use("/auth", tokenGenRouter);
 app.use("/user", userRoutes);
+// Spotify Routes
+app.use("/artists", spotifyArtistRoute);
+app.use("/categories", spotifyCategoryRoute);
 
 module.exports = { app, port };

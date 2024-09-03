@@ -15,7 +15,7 @@ const NavBar = () => {
   const { toggleMenu, setToggleMenu } = useContext(MyContext);
 
   return (
-    <nav className="bg-black flex w-full px-4 py-2 justify-between items-center">
+    <nav className="bg-black flex w-full px-4 py-2 justify-between items-center relative z-10">
       {/* Menu */}
       {toggleMenu && (
         <motion.ul
